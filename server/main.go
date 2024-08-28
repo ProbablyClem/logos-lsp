@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	println("Hello, World!")
 	logger := getLogger("logos-lsp.log")
 	logger.Println("Starting Logos LSP")
 

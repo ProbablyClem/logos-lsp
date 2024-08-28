@@ -9,7 +9,7 @@ function activate(context) {
     // The server is implemented in go so we have a singe binary to run
     const serverCommand = "logos-lsp";
     // we run the locally build version
-    const debugServerCommand = path.join(context.extensionPath, "./server/logos-ls");
+    const debugServerCommand = path.join(context.extensionPath, "./server/logos-lsp");
     // If the extension is launched in debug mode then the debug server options are used
     // Otherwise the run options are used
     const serverOptions = {

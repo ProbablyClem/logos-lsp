@@ -24,3 +24,8 @@ go.work.sum
 # env file
 .env
 node_modules
+server/logos-lsp.log
+client/out/extension.js
+client/out/extension.js.map
+client/tsconfig.tsbuildinfo
+server/logos-lsp.log
