@@ -12,21 +12,20 @@ let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
   // The server is implemented in go so we have a singe binary to run
-  const serverModule = context.asAbsolutePath(
-    path.join("../server", "logos-lsp")
-  );
-
-  const serverModuleDebug = context.asAbsolutePath(
-    path.join("../server", "logos-lsp")
-  );
+  const serverCommand = "logos-lsp";
+  const debugServerCommand = "../server/logos-lsp";
 
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
+
   const serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
+    run: {
+      command: serverCommand,
+      transport: TransportKind.stdio,
+    },
     debug: {
-      module: serverModuleDebug,
-      transport: TransportKind.ipc,
+      command: debugServerCommand,
+      transport: TransportKind.stdio,
     },
   };
 
