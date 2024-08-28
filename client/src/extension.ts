@@ -13,7 +13,11 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
   // The server is implemented in node
   const serverModule = context.asAbsolutePath(
-    path.join("server", "out", "server.js")
+    path.join("../server", "logos-lsp")
+  );
+
+  const serverModuleDebug = context.asAbsolutePath(
+    path.join("../server", "logos-lsp")
   );
 
   // If the extension is launched in debug mode then the debug server options are used
@@ -21,15 +25,15 @@ export function activate(context: ExtensionContext) {
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
     debug: {
-      module: serverModule,
+      module: serverModuleDebug,
       transport: TransportKind.ipc,
     },
   };
 
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
-    // Register the server for plain text documents
-    documentSelector: [{ scheme: "file", language: "plaintext" }],
+    // Register the server for all documents by default
+    documentSelector: [{ scheme: "file", language: "*" }],
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
       fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
@@ -38,8 +42,8 @@ export function activate(context: ExtensionContext) {
 
   // Create the language client and start the client.
   client = new LanguageClient(
-    "languageServerExample",
-    "Language Server Example",
+    "logos-lsp",
+    "logos lsp",
     serverOptions,
     clientOptions
   );

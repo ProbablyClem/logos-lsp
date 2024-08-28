@@ -1,0 +1,29 @@
+{
+  "name": "logos-lsp",
+  "description": "Language Server Protocol for Logos Markup Language",
+  "author": "Clement Guiton",
+  "license": "MIT",
+  "version": "1.0.0",
+  "publisher": "Clement Guiton",
+  "categories": [],
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "activationEvents": [
+    "onLanguage"
+  ],
+  "main": "./client/out/extension",
+  "contributes": {
+    "configuration": {}
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && go build . && cd .."
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2"
+  }
+}
