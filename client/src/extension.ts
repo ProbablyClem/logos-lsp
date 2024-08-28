@@ -11,7 +11,7 @@ import {
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
-  // The server is implemented in node
+  // The server is implemented in go so we have a singe binary to run
   const serverModule = context.asAbsolutePath(
     path.join("../server", "logos-lsp")
   );
