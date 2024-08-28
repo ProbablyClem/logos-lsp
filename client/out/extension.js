@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
+const path = require("path");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
 let client;
 function activate(context) {
     // The server is implemented in go so we have a singe binary to run
     const serverCommand = "logos-lsp";
-    const debugServerCommand = "../server/logos-lsp";
+    // we run the locally build version
+    const debugServerCommand = path.join(context.extensionPath, "./server/logos-ls");
     // If the extension is launched in debug mode then the debug server options are used
     // Otherwise the run options are used
     const serverOptions = {
