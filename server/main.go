@@ -2,33 +2,57 @@ package main
 
 import (
 	"bufio"
-	"log"
+	"encoding/json"
+	"logos-lsp/analysis"
+	"logos-lsp/lsp"
 	"logos-lsp/rpc"
 	"os"
 )
 
 func main() {
-	println("Hello, World!")
-	logger := getLogger("logos-lsp.log")
-	logger.Println("Starting Logos LSP")
+	println("Starting Logos Server")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(rpc.Split)
+
+	state := analysis.NewState()
 	for scanner.Scan() {
-		text := scanner.Text()
-		handleMessage(logger, text)
+		msg := scanner.Bytes()
+		method, content, err := rpc.DecodeMessage(msg)
+		if err != nil {
+			println("Error decoding message: %s", err)
+			continue
+		}
+
+		handleMessage(state, method, content)
 	}
 }
 
-func handleMessage(logger *log.Logger, msg any) {
-	logger.Printf("Received message: %s", msg)
-}
+func handleMessage(state *analysis.State, method string, msg []byte) {
+	println("Received message with method", method)
 
-func getLogger(filename string) *log.Logger {
-	logFile, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
-	if err != nil {
-		panic(err)
+	switch method {
+	case "initialize":
+		var request lsp.InitializeRequest
+		if err := json.Unmarshal(msg, &request); err != nil {
+			println("Error unmarshalling initialize request %s", err)
+		}
+		println("Connected to", request.Params.ClientInfo.Name, request.Params.ClientInfo.Version)
+
+		writer := os.Stdout
+		msg := lsp.NewInitializeResponse(request.ID)
+		reply := rpc.EncodeMessage(msg)
+		writer.Write([]byte(reply))
+
+		println("Sent initialize response")
+
+	case "textDocument/didOpen":
+		var notification lsp.DidOpenTextDocumentNotification
+		if err := json.Unmarshal(msg, &notification); err != nil {
+			println("Error unmarshalling didOpen notification %s", err)
+		}
+		println("Opened document", notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+		state.OpenDocument(notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+
 	}
-
-	return log.New(logFile, "[logos-lsp]", log.Ldate|log.Ltime|log.Lshortfile)
 }
