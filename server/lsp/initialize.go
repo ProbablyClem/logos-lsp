@@ -26,6 +26,7 @@ type InitializeResponseResult struct {
 
 type ServerCapabilities struct {
 	TextDocumentSync TextDocumentSyncOptions `json:"textDocumentSync"`
+	HoverProvider    bool                    `json:"hoverProvider"`
 }
 
 type TextDocumentSyncOptions struct {
@@ -58,6 +59,7 @@ func NewInitializeResponse(id int) InitializeResponse {
 					OpenClose: true,
 					SyncKind:  Full,
 				},
+				HoverProvider: true,
 			},
 			ServerInfo: ServerInfo{
 				Name:    "Logos",
