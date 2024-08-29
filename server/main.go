@@ -86,6 +86,26 @@ func handleMessage(writer io.Writer, state *analysis.State, method string, msg [
 		}
 
 		writeResponse(writer, response)
+	case "textDocument/definition":
+		var request lsp.DefinitionRequest
+		if err := json.Unmarshal(msg, &request); err != nil {
+			println("Error unmarshalling definition request %s", err)
+		}
+
+		result := state.Definition(
+			request.Params.TextDocumentPositionParams.TextDocument.URI,
+			request.Params.TextDocumentPositionParams.Position,
+		)
+
+		response := lsp.DefinitionResponse{
+			Response: lsp.Response{
+				RPC: "2.0",
+				ID:  &request.ID,
+			},
+			Result: result,
+		}
+
+		writeResponse(writer, response)
 	}
 }
 

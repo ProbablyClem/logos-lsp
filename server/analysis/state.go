@@ -29,3 +29,19 @@ func (s *State) Hover(uri string, position lsp.Position) lsp.HoverResult {
 		Contents: fmt.Sprintf("You are at line %d, character %d", position.Line, position.Character),
 	}
 }
+
+func (s *State) Definition(uri string, position lsp.Position) lsp.Location {
+	return lsp.Location{
+		URI: uri,
+		Range: lsp.Range{
+			Start: lsp.Position{
+				Line:      position.Line,
+				Character: 0,
+			},
+			End: lsp.Position{
+				Line:      position.Line,
+				Character: 10,
+			},
+		},
+	}
+}
