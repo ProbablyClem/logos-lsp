@@ -71,6 +71,36 @@ func TestFindBibleQuotes(t *testing.T) {
 	}
 }
 
+func TestFindRangeBibleQuotes(t *testing.T) {
+	text := `qdqzdzqd Mt 20 1-10 qzdqdqzd`
+
+	uri := "file:///path/to/file.txt"
+	bibleQuotes := analysis.FindBibleQuotesWithPosition(uri, text)
+
+	// Check the first quote
+	if bibleQuotes[0].Book != "Matthieu" {
+		t.Errorf("Expected book to be Matthieu, got %s", bibleQuotes[0].Book)
+	}
+	if bibleQuotes[0].Chapter != 20 {
+		t.Errorf("Expected chapter to be 20, got %d", bibleQuotes[0].Chapter)
+	}
+	if bibleQuotes[0].Verse != 1 {
+		t.Errorf("Expected verse to be 1, got %d", bibleQuotes[0].Verse)
+	}
+	if bibleQuotes[0].Range.Start.Line != 0 {
+		t.Errorf("Expected line to be 0, got %d", bibleQuotes[0].Range.Start.Line)
+	}
+	if bibleQuotes[0].Range.Start.Character != 9 {
+		t.Errorf("Expected character to be 9, got %d", bibleQuotes[0].Range.Start.Character)
+	}
+	if bibleQuotes[0].Range.End.Line != 0 {
+		t.Errorf("Expected line to be 0, got %d", bibleQuotes[0].Range.End.Line)
+	}
+	if bibleQuotes[0].Range.End.Character != 19 {
+		t.Errorf("Expected character to be 19, got %d", bibleQuotes[0].Range.End.Character)
+	}
+}
+
 func TestQuoteIsInRange(t *testing.T) {
 	quote := analysis.Quote{
 		Range: lsp.Range{
