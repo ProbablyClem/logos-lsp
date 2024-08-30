@@ -106,6 +106,25 @@ func handleMessage(writer io.Writer, state *analysis.State, method string, msg [
 		}
 
 		writeResponse(writer, response)
+
+	case "textDocument/semanticTokens/full":
+		var request lsp.SemanticTokensRequest
+		if err := json.Unmarshal(msg, &request); err != nil {
+			println("Error unmarshalling semantic tokens request %s", err)
+		}
+
+		tokens := state.SemanticTokens(request.Params.TextDocument.URI)
+		respose := lsp.SemanticTokensResponse{
+			Response: lsp.Response{
+				RPC: "2.0",
+				ID:  &request.ID,
+			},
+			Result: lsp.SemanticTokensResult{
+				Data: lsp.EncodeSemanticTokens(tokens),
+			},
+		}
+
+		writeResponse(writer, respose)
 	}
 }
 

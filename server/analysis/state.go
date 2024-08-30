@@ -63,6 +63,20 @@ func (s *State) Definition(uri string, position lsp.Position) lsp.Location {
 	}
 }
 
+func (s *State) SemanticTokens(uri string) []lsp.SemanticToken {
+	quotes := s.Quotes[uri]
+	tokens := []lsp.SemanticToken{}
+	for _, quote := range quotes {
+		tokens = append(tokens, lsp.SemanticToken{
+			TokenType: lsp.TokenTypesFunction,
+			Line:      quote.Range.Start.Line,
+			StartChar: quote.Range.Start.Character,
+			Length:    quote.Range.End.Character - quote.Range.Start.Character,
+		})
+	}
+	return tokens
+}
+
 func (s *State) searchQuotes(uri string) {
 	text, ok := s.Documents[uri]
 	if !ok {

@@ -25,9 +25,10 @@ type InitializeResponseResult struct {
 }
 
 type ServerCapabilities struct {
-	TextDocumentSync   TextDocumentSyncOptions `json:"textDocumentSync"`
-	HoverProvider      bool                    `json:"hoverProvider"`
-	DefinitionProvider bool                    `json:"definitionProvider"`
+	TextDocumentSync      TextDocumentSyncOptions `json:"textDocumentSync"`
+	HoverProvider         bool                    `json:"hoverProvider"`
+	DefinitionProvider    bool                    `json:"definitionProvider"`
+	SemanticTokensOptions SemanticTokensOptions   `json:"semanticTokensProvider"`
 }
 
 type TextDocumentSyncOptions struct {
@@ -60,8 +61,9 @@ func NewInitializeResponse(id int) InitializeResponse {
 					OpenClose: true,
 					SyncKind:  Full,
 				},
-				HoverProvider:      true,
-				DefinitionProvider: true,
+				HoverProvider:         true,
+				DefinitionProvider:    true,
+				SemanticTokensOptions: NewSemanticTokensOptions(),
 			},
 			ServerInfo: ServerInfo{
 				Name:    "Logos",
