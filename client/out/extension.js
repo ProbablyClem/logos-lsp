@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
+exports.activate = activate;
+exports.deactivate = deactivate;
 const path = require("path");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
@@ -25,7 +26,7 @@ function activate(context) {
     // Options to control the language client
     const clientOptions = {
         // Register the server for all documents by default
-        documentSelector: [{ scheme: "file", language: "*" }],
+        documentSelector: [{ scheme: "file", language: "markdown" }],
         synchronize: {
             // Notify the server about file changes to '.clientrc files contained in the workspace
             fileEvents: vscode_1.workspace.createFileSystemWatcher("**/.clientrc"),
@@ -36,12 +37,10 @@ function activate(context) {
     // Start the client. This will also launch the server
     client.start();
 }
-exports.activate = activate;
 function deactivate() {
     if (!client) {
         return undefined;
     }
     return client.stop();
 }
-exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
