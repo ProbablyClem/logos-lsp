@@ -39,11 +39,17 @@ func (s *State) Hover(uri string, position lsp.Position) lsp.HoverResult {
 	quotes := s.Quotes[uri]
 	for _, quote := range quotes {
 		if quote.IsInRange(position.Line, position.Character) {
-			verse := s.Bible.GetVerse(quote.Book, quote.Chapter, quote.Verse)
+			content := s.Bible.GetQuoteContent(quote.Book, quote.Chapter, quote.StartVerse, quote.EndVerse)
+			versets := ""
+			if quote.EndVerse != quote.StartVerse {
+				versets = fmt.Sprintf("%d-%d", quote.StartVerse, quote.EndVerse)
+			} else {
+				versets = fmt.Sprintf("%d", quote.StartVerse)
+			}
 			return lsp.HoverResult{
 				Contents: lsp.MarkupContent{
 					Kind:  lsp.Markdown,
-					Value: fmt.Sprintf("### %s Chapitre %d Verset %d   \n %s", quote.Book, quote.Chapter, quote.Verse, verse.Text),
+					Value: fmt.Sprintf("### 📖 %s Chapitre %d Verset %s   \n %s", quote.Book, quote.Chapter, versets, content),
 				},
 			}
 		}
@@ -97,7 +103,7 @@ func (s *State) searchQuotes(uri string) {
 	s.Quotes[uri] = quotes
 
 	for _, quote := range quotes {
-		log.Printf("Found quote: %s %d:%d", quote.Book, quote.Chapter, quote.Verse)
+		log.Printf("Found quote: %s %d:%d", quote.Book, quote.Chapter, quote.StartVerse)
 		log.Printf("Quote start at %d:%d", quote.Range.Start.Line, quote.Range.Start.Character)
 		log.Printf("Quote end at %d:%d", quote.Range.End.Line, quote.Range.End.Character)
 	}

@@ -25,8 +25,8 @@ func TestFindBibleQuotes(t *testing.T) {
 	if bibleQuotes[0].Chapter != 3 {
 		t.Errorf("Expected chapter to be 3, got %d", bibleQuotes[0].Chapter)
 	}
-	if bibleQuotes[0].Verse != 16 {
-		t.Errorf("Expected verse to be 16, got %d", bibleQuotes[0].Verse)
+	if bibleQuotes[0].StartVerse != 16 {
+		t.Errorf("Expected verse to be 16, got %d", bibleQuotes[0].StartVerse)
 	}
 	if bibleQuotes[0].Uri != uri {
 		t.Errorf("Expected URI to be %s, got %s", uri, bibleQuotes[0].Uri)
@@ -51,8 +51,8 @@ func TestFindBibleQuotes(t *testing.T) {
 	if bibleQuotes[6].Chapter != 8 {
 		t.Errorf("Expected chapter to be 8, got %d", bibleQuotes[6].Chapter)
 	}
-	if bibleQuotes[6].Verse != 28 {
-		t.Errorf("Expected verse to be 28, got %d", bibleQuotes[6].Verse)
+	if bibleQuotes[6].StartVerse != 28 {
+		t.Errorf("Expected verse to be 28, got %d", bibleQuotes[6].StartVerse)
 	}
 	if bibleQuotes[6].Uri != uri {
 		t.Errorf("Expected URI to be %s, got %s", uri, bibleQuotes[6].Uri)
@@ -84,8 +84,8 @@ func TestFindRangeBibleQuotes(t *testing.T) {
 	if bibleQuotes[0].Chapter != 20 {
 		t.Errorf("Expected chapter to be 20, got %d", bibleQuotes[0].Chapter)
 	}
-	if bibleQuotes[0].Verse != 1 {
-		t.Errorf("Expected verse to be 1, got %d", bibleQuotes[0].Verse)
+	if bibleQuotes[0].StartVerse != 1 {
+		t.Errorf("Expected verse to be 1, got %d", bibleQuotes[0].StartVerse)
 	}
 	if bibleQuotes[0].Range.Start.Line != 0 {
 		t.Errorf("Expected line to be 0, got %d", bibleQuotes[0].Range.Start.Line)

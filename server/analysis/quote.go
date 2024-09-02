@@ -16,9 +16,10 @@ type Quote struct {
 }
 
 type Reference struct {
-	Book    string
-	Chapter int
-	Verse   int
+	Book       string
+	Chapter    int
+	StartVerse int
+	EndVerse   int
 }
 
 // Function to find Bible quotes and their positions (line number, char position)
@@ -61,7 +62,7 @@ func FindBibleQuotesWithPosition(uri string, text string) []Quote {
 
 func ParseReference(quote string) Reference {
 	// Regex pattern to match different Bible reference formats
-	pattern := `(?i)\b([A-Za-z]+)\s+(\d+)[\s:\-](\d+)\b`
+	pattern := `(?i)\b([A-Za-z]+)\s+(\d+)[\s:\-](\d+)(?:-(\d+))?\b`
 	re := regexp.MustCompile(pattern)
 
 	// Find the first match
@@ -70,17 +71,28 @@ func ParseReference(quote string) Reference {
 	// Extract the book, chapter, and verse
 	book := match[1]
 	chapter := match[2]
-	verse := match[3]
+	startVerse := match[3]
+	var endVerseInt int
 
 	// Convert chapter and verse to integers
 	// Handle errors if conversion fails
 	chapterInt, _ := strconv.Atoi(chapter)
-	verseInt, _ := strconv.Atoi(verse)
+	startVerseInt, _ := strconv.Atoi(startVerse)
+
+	println("match[4]", match[4])
+	if match[4] != "" {
+		endVerse := match[4]
+		verseInt, _ := strconv.Atoi(endVerse)
+		endVerseInt = verseInt
+	} else {
+		endVerseInt = startVerseInt
+	}
 
 	return Reference{
-		Book:    NormalizeBookName(book),
-		Chapter: chapterInt,
-		Verse:   verseInt,
+		Book:       NormalizeBookName(book),
+		Chapter:    chapterInt,
+		StartVerse: startVerseInt,
+		EndVerse:   endVerseInt,
 	}
 }
 

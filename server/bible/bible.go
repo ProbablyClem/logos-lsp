@@ -2,6 +2,7 @@ package bible
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -61,8 +62,23 @@ func LoadFromFile() Bible {
 	return bible
 }
 
-func (b Bible) GetVerse(book string, chapter, verse int) Verse {
-	v := b.Books[book].Chapters[chapter].Verses[verse]
-	println("Verse", v.Text)
-	return v
+func (b Bible) GetQuoteContent(book string, chapter int, startVerse int, endVerse int) string {
+	println("Getting quote content for", book, chapter, startVerse, endVerse)
+	content := ""
+	for verse := startVerse; verse <= endVerse; verse++ {
+		v := b.GetVerse(book, chapter, verse)
+		content += fmt.Sprintf("%d. %s \n  ", verse, v.Text)
+	}
+	return content
+}
+
+func (b Bible) GetVerse(book string, chapter int, verse int) Verse {
+	if book, ok := b.Books[book]; ok {
+		if chapter, ok := book.Chapters[chapter]; ok {
+			if verse, ok := chapter.Verses[verse]; ok {
+				return verse
+			}
+		}
+	}
+	return Verse{}
 }
