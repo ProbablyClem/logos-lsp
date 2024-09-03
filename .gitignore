@@ -29,3 +29,4 @@ client/out/extension.js
 client/out/extension.js.map
 client/tsconfig.tsbuildinfo
 server/logos-lsp.log
+server/logos-lsp

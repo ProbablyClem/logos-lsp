@@ -125,6 +125,23 @@ func handleMessage(writer io.Writer, state *analysis.State, method string, msg [
 		}
 
 		writeResponse(writer, respose)
+
+	case "textDocument/codeAction":
+		var request lsp.CodeActionRequest
+		if err := json.Unmarshal(msg, &request); err != nil {
+			println("Error unmarshalling code action request %s", err)
+		}
+
+		codeActions := state.CodeAction(request.Params.TextDocumentIdentifier.URI, request.Params.Range)
+		response := lsp.CodeActionResponse{
+			Response: lsp.Response{
+				RPC: "2.0",
+				ID:  &request.ID,
+			},
+			Result: codeActions,
+		}
+
+		writeResponse(writer, response)
 	}
 }
 

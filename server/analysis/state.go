@@ -93,6 +93,43 @@ func (s *State) SemanticTokens(uri string) []lsp.SemanticToken {
 	return tokens
 }
 
+func (s *State) CodeAction(uri string, r lsp.Range) []lsp.CodeAction {
+	quotes := s.Quotes[uri]
+	codeActions := []lsp.CodeAction{}
+
+	for _, quote := range quotes {
+		if !quote.IsInRange(r.Start.Line, r.Start.Character) {
+			continue
+		}
+		codeActions = append(codeActions, lsp.CodeAction{
+			Title: fmt.Sprintf("Inline %s %d:%d", quote.Book, quote.Chapter, quote.StartVerse),
+			Kind:  lsp.RefactorInline,
+			Command: lsp.Command{
+				Command: "replaceQuote",
+				Title:   "Replace Quote",
+			},
+			IsPreferred: true,
+			Diagnostics: []lsp.Diagnostic{
+				{
+					Range: lsp.Range{
+						Start: lsp.Position{
+							Line:      quote.Range.Start.Line,
+							Character: quote.Range.Start.Character,
+						},
+						End: lsp.Position{
+							Line:      quote.Range.End.Line,
+							Character: quote.Range.End.Character,
+						},
+					},
+					Severity: lsp.Hint,
+					Message:  "Inline quote",
+				},
+			},
+		})
+	}
+	return codeActions
+}
+
 func (s *State) searchQuotes(uri string) {
 	text, ok := s.Documents[uri]
 	if !ok {

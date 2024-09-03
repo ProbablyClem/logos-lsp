@@ -29,6 +29,7 @@ type ServerCapabilities struct {
 	HoverProvider         bool                    `json:"hoverProvider"`
 	DefinitionProvider    bool                    `json:"definitionProvider"`
 	SemanticTokensOptions SemanticTokensOptions   `json:"semanticTokensProvider"`
+	CodeActionProvider    bool                    `json:"codeActionProvider"`
 }
 
 type TextDocumentSyncOptions struct {
@@ -64,6 +65,7 @@ func NewInitializeResponse(id int) InitializeResponse {
 				HoverProvider:         true,
 				DefinitionProvider:    true,
 				SemanticTokensOptions: NewSemanticTokensOptions(),
+				CodeActionProvider:    true,
 			},
 			ServerInfo: ServerInfo{
 				Name:    "Logos",
