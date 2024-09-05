@@ -24,12 +24,16 @@ type CodeActionResponse struct {
 type CodeAction struct {
 	Title       string         `json:"title"`
 	Kind        CodeActionKind `json:"kind"`
-	Command     Command        `json:"command"`
 	IsPreferred bool           `json:"isPreferred"`
 	Diagnostics []Diagnostic   `json:"diagnostics"`
+	Edit        WorkspaceEdit  `json:"edit"`
 }
 
-type Command struct {
-	Command string `json:"command"`
-	Title   string `json:"title"`
+type WorkspaceEdit struct {
+	Changes map[string][]TextEdit `json:"changes"`
+}
+
+type TextEdit struct {
+	Range   Range  `json:"range"`
+	NewText string `json:"newText"`
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Package bible provides a simple API to search for quotes in the Bible.
@@ -67,8 +68,9 @@ func (b Bible) GetQuoteContent(book string, chapter int, startVerse int, endVers
 	content := ""
 	for verse := startVerse; verse <= endVerse; verse++ {
 		v := b.GetVerse(book, chapter, verse)
-		content += fmt.Sprintf("%d. %s \n  ", verse, v.Text)
+		content += fmt.Sprintf("%d. %s \n", verse, v.Text)
 	}
+	content = strings.TrimSuffix(content, "\n")
 	return content
 }
 

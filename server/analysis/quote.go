@@ -46,6 +46,10 @@ func FindBibleQuotesWithPosition(uri string, text string) []Quote {
 			end := lsp.Position{Line: lineNumber, Character: charPosition + len(quote)}
 			reference := ParseReference(quote)
 
+			if reference.Book == "Verset" {
+				continue
+			}
+
 			results = append(results, Quote{
 				Reference: reference,
 				Uri:       uri,

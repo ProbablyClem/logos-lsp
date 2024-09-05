@@ -5,6 +5,7 @@ import (
 	"log"
 	"logos-lsp/bible"
 	"logos-lsp/lsp"
+	"logos-lsp/utils"
 )
 
 type State struct {
@@ -49,7 +50,7 @@ func (s *State) Hover(uri string, position lsp.Position) lsp.HoverResult {
 			return lsp.HoverResult{
 				Contents: lsp.MarkupContent{
 					Kind:  lsp.Markdown,
-					Value: fmt.Sprintf("### 📖 %s Chapitre %d Verset %s   \n %s", quote.Book, quote.Chapter, versets, content),
+					Value: fmt.Sprintf("### 📖 %s Chapitre %d Verset %s   \n%s", quote.Book, quote.Chapter, versets, content),
 				},
 			}
 		}
@@ -93,34 +94,56 @@ func (s *State) SemanticTokens(uri string) []lsp.SemanticToken {
 	return tokens
 }
 
-func (s *State) CodeAction(uri string, r lsp.Range) []lsp.CodeAction {
+func (s *State) CodeAction(uri string, selectedRange lsp.Range) []lsp.CodeAction {
 	quotes := s.Quotes[uri]
 	codeActions := []lsp.CodeAction{}
 
 	for _, quote := range quotes {
-		if !quote.IsInRange(r.Start.Line, r.Start.Character) {
+		if !quote.IsInRange(selectedRange.Start.Line, selectedRange.Start.Character) {
 			continue
 		}
+
+		quoteRange := lsp.Range{
+			Start: lsp.Position{
+				Line:      quote.Range.Start.Line,
+				Character: quote.Range.Start.Character,
+			},
+			End: lsp.Position{
+				Line:      quote.Range.End.Line,
+				Character: quote.Range.End.Character,
+			},
+		}
+
+		content := s.Bible.GetQuoteContent(quote.Book, quote.Chapter, quote.StartVerse, quote.EndVerse)
+		reference := ""
+		if quote.EndVerse != quote.StartVerse {
+			reference = fmt.Sprintf("%s %d : %d-%d", quote.Book, quote.Chapter, quote.StartVerse, quote.EndVerse)
+		} else {
+			reference = fmt.Sprintf("%s %d : %d", quote.Book, quote.Chapter, quote.StartVerse)
+		}
+
+		content = fmt.Sprintf("### 📖 %s\n%s", reference, content)
+
+		quotedContent := utils.ToMarkdownQuote(content)
+		quotedContent = quotedContent + "\n"
+
+		textEdit := lsp.TextEdit{
+			Range:   quoteRange,
+			NewText: quotedContent,
+		}
+
 		codeActions = append(codeActions, lsp.CodeAction{
 			Title: fmt.Sprintf("Inline %s %d:%d", quote.Book, quote.Chapter, quote.StartVerse),
 			Kind:  lsp.RefactorInline,
-			Command: lsp.Command{
-				Command: "replaceQuote",
-				Title:   "Replace Quote",
+			Edit: lsp.WorkspaceEdit{
+				Changes: map[string][]lsp.TextEdit{
+					uri: {textEdit},
+				},
 			},
 			IsPreferred: true,
 			Diagnostics: []lsp.Diagnostic{
 				{
-					Range: lsp.Range{
-						Start: lsp.Position{
-							Line:      quote.Range.Start.Line,
-							Character: quote.Range.Start.Character,
-						},
-						End: lsp.Position{
-							Line:      quote.Range.End.Line,
-							Character: quote.Range.End.Character,
-						},
-					},
+					Range:    quoteRange,
 					Severity: lsp.Hint,
 					Message:  "Inline quote",
 				},
