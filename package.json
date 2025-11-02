@@ -4,7 +4,8 @@
   "author": "Clement Guiton",
   "license": "MIT",
   "version": "1.0.0",
-  "publisher": "Clement Guiton",
+  "publisher": "clementguiton",
+  "repository": "https://github.com/ProbablyClem/logos-lsp",
   "categories": [],
   "engines": {
     "vscode": "^1.75.0"

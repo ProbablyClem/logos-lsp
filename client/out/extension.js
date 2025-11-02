@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.deactivate = exports.activate = void 0;
 const path = require("path");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
@@ -37,10 +36,12 @@ function activate(context) {
     // Start the client. This will also launch the server
     client.start();
 }
+exports.activate = activate;
 function deactivate() {
     if (!client) {
         return undefined;
     }
     return client.stop();
 }
+exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map

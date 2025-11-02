@@ -25,7 +25,8 @@ type Reference struct {
 // Function to find Bible quotes and their positions (line number, char position)
 func FindBibleQuotesWithPosition(uri string, text string) []Quote {
 	// Regex pattern to match different Bible reference formats
-	pattern := `(?i)\b([A-Za-z]+)\s+(\d+)[\s:\-](\d+)(?:-(\d+))?\b`
+	pattern := `(?i)\b(\d?\s*[A-Za-z\.]+)\s+(\d+)[\s:\-.,](\d+)(?:[-–](\d+))?\b`
+
 	re := regexp.MustCompile(pattern)
 
 	// Split the text by lines
@@ -66,7 +67,8 @@ func FindBibleQuotesWithPosition(uri string, text string) []Quote {
 
 func ParseReference(quote string) Reference {
 	// Regex pattern to match different Bible reference formats
-	pattern := `(?i)\b([A-Za-z]+)\s+(\d+)[\s:\-](\d+)(?:-(\d+))?\b`
+	pattern := `(?i)\b(\d?\s*[A-Za-z\.]+)\s+(\d+)[\s:\-.,](\d+)(?:[-–](\d+))?\b`
+
 	re := regexp.MustCompile(pattern)
 
 	// Find the first match

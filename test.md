@@ -23,9 +23,15 @@
 > 3. Heureux celui qui lit et ceux qui écoutent les paroles de la prophétie et gardent ce qui s'y trouve écrit, car le moment est proche!
 
 Lc 1:1-4
+Lc 1,1-4
+Lc 1.1-4
 qdqzd zqdqzd 2223
 qzdqds
 
 lqlzdlqzodo
 
+Rom 1 13
+ROM 1:14-15
+1 Timothee 1:17
+2TM 1 6
 [aze]
